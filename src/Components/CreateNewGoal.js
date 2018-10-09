@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import AddIcon from "@material-ui/icons/Add";
+import moment from "moment";
 import {
   Typography,
   Paper,
@@ -40,8 +41,27 @@ const styles = theme => ({
 });
 
 class CreateNewGoal extends Component {
+  state = {
+    goalName: null,
+    goalDate: new Date(),
+    goalCategory: "",
+    goalPriority: "",
+    goalDesc: null
+  };
+
+  handleChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  handleDateChange = date => {
+    // removes the timestamp from the momentjs date
+    const formattedDate = date.format("LL");
+    this.setState({ goalDate: formattedDate });
+  };
+
   render() {
     const { classes } = this.props;
+    const { goalDate, goalPriority, goalCategory } = this.state;
 
     return (
       <form action="" className={classes.root}>
@@ -53,29 +73,54 @@ class CreateNewGoal extends Component {
             <Grid item xs={12} sm={6}>
               <TextField
                 placeholder="Goal Name"
-                id="goal-name"
+                name="goalName"
+                onChange={this.handleChange}
                 fullWidth
                 className={classes.formControl}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <MuiPickersUtilsProvider utils={MomentUtils}>
-                <DatePicker fullWidth className={classes.formControl} />
+                <DatePicker
+                  fullWidth
+                  className={classes.formControl}
+                  onChange={this.handleDateChange}
+                  value={goalDate}
+                />
               </MuiPickersUtilsProvider>
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth className={classes.formControl}>
-                <InputLabel htmlFor="Category">Category</InputLabel>
-                <Select>
-                  <MenuItem value="">Category</MenuItem>
+                <InputLabel htmlFor="category">Category</InputLabel>
+                <Select
+                  name="goalCategory"
+                  onChange={this.handleChange}
+                  value={goalCategory}
+                >
+                  <MenuItem value="financial">Financial</MenuItem>
+                  <MenuItem value="career">Career</MenuItem>
+                  <MenuItem value="friends">Friends</MenuItem>
+                  <MenuItem value="travel">Travel</MenuItem>
+                  <MenuItem value="health">Health</MenuItem>
+                  <MenuItem value="family">Family</MenuItem>
+                  <MenuItem value="education">Education</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth className={classes.formControl}>
                 <InputLabel htmlFor="Category">Priority Level</InputLabel>
-                <Select>
-                  <MenuItem value="">Priority Level</MenuItem>
+                <Select
+                  onChange={this.handleChange}
+                  name="goalPriority"
+                  value={goalPriority}
+                >
+                  <MenuItem value="" disabled>
+                    Priority Level
+                  </MenuItem>
+                  <MenuItem value="Low">Low</MenuItem>
+                  <MenuItem value="Medium">Medium</MenuItem>
+                  <MenuItem value="High">High</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
