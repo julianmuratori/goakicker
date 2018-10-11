@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AddIcon from "@material-ui/icons/Add";
-import moment from "moment";
+// import moment from "moment";
 import {
   Typography,
   Paper,
@@ -20,6 +20,7 @@ import MuiPickersUtilsProvider from "material-ui-pickers/utils/MuiPickersUtilsPr
 // import DateFnsUtils from "material-ui-pickers/utils/date-fns-utils";
 import MomentUtils from "material-ui-pickers/utils/moment-utils";
 import DatePicker from "material-ui-pickers/DatePicker";
+import moment from "moment";
 
 const styles = theme => ({
   root: {
@@ -43,7 +44,7 @@ const styles = theme => ({
 class CreateNewGoal extends Component {
   state = {
     goalName: null,
-    goalDate: new Date(),
+    goalDate: null,
     goalCategory: "",
     goalPriority: "",
     goalDesc: null
@@ -54,9 +55,16 @@ class CreateNewGoal extends Component {
   };
 
   handleDateChange = date => {
-    // removes the timestamp from the momentjs date
-    const formattedDate = date.format("LL");
+    // formats the date via momentjs
+    const formattedDate = date.format();
     this.setState({ goalDate: formattedDate });
+  };
+
+  handleSubmit = e => {
+    const { submitGoal } = this.props;
+    e.preventDefault();
+    const goal = this.state;
+    submitGoal(goal);
   };
 
   render() {
@@ -72,6 +80,7 @@ class CreateNewGoal extends Component {
           <Grid container spacing={24}>
             <Grid item xs={12} sm={6}>
               <TextField
+                required
                 placeholder="Goal Name"
                 name="goalName"
                 onChange={this.handleChange}
@@ -82,6 +91,8 @@ class CreateNewGoal extends Component {
             <Grid item xs={12} sm={6}>
               <MuiPickersUtilsProvider utils={MomentUtils}>
                 <DatePicker
+                  required
+                  placeholder="Pick a Due Date"
                   fullWidth
                   className={classes.formControl}
                   onChange={this.handleDateChange}
@@ -93,6 +104,7 @@ class CreateNewGoal extends Component {
               <FormControl fullWidth className={classes.formControl}>
                 <InputLabel htmlFor="category">Category</InputLabel>
                 <Select
+                  required
                   name="goalCategory"
                   onChange={this.handleChange}
                   value={goalCategory}
@@ -111,6 +123,7 @@ class CreateNewGoal extends Component {
               <FormControl fullWidth className={classes.formControl}>
                 <InputLabel htmlFor="Category">Priority Level</InputLabel>
                 <Select
+                  required
                   onChange={this.handleChange}
                   name="goalPriority"
                   value={goalPriority}
@@ -126,10 +139,21 @@ class CreateNewGoal extends Component {
             </Grid>
 
             <Grid item xs={12}>
-              <TextField fullWidth placeholder="Leave a short description" />
+              <TextField
+                required
+                name="goalDesc"
+                fullWidth
+                placeholder="Leave a short description"
+                onChange={this.handleChange}
+              />
             </Grid>
             <Grid item xs={12}>
-              <Button variant="contained" color="primary">
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                onClick={this.handleSubmit}
+              >
                 Add <AddIcon />
               </Button>
             </Grid>
