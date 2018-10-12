@@ -2,15 +2,25 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-// import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-// import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
 
 const styles = theme => ({
   root: {
     display: "flex"
+  },
+  name: {
+    flexGrow: 1
+  },
+  goaldetails: {
+    minWidth: "250px",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-around"
+  },
+  goalDate: {
+    width: "100%"
   }
 });
 
@@ -20,11 +30,16 @@ class Goal extends Component {
     return (
       <Card>
         <CardContent className={classes.root}>
-          <Typography gutterBottom>{goal.goalName}</Typography>
-
-          <Typography>{goal.goalCategory}</Typography>
-          <Typography>{goal.goalDate}</Typography>
-          <Typography>{goal.goalPriority}</Typography>
+          <Typography gutterBottom className={classes.name}>
+            {goal.goalName}
+          </Typography>
+          <div className={classes.goaldetails}>
+            <Typography className={classes.goalDate}>
+              {goal.goalDate}
+            </Typography>
+            <Typography>{goal.goalCategory}</Typography>
+            <Typography>{goal.goalPriority}</Typography>
+          </div>
         </CardContent>
       </Card>
     );
